@@ -4,11 +4,11 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y wget
 
 # install stata
-COPY stata_install.tar.gz /home/stata_install.tar.gz
+COPY stata.tar.gz /home/stata_install.tar.gz
 RUN cd /tmp/ && \
     mkdir -p statafiles && \
     cd statafiles && \
-    tar -zxf /home/stata_install.tar.gz && \
+    tar -zxf /home/stata.tar.gz && \
     cd /usr/local && \
     mkdir -p stata && \
     cd stata && \
