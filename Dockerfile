@@ -49,12 +49,18 @@ RUN mamba install pysal geopandas libspatialindex=1.9.3 --channel conda-forge
 RUN mamba install shapely pyproj rtree matplotlib descartes mapclassify contextily
 
 #install jupyter extensions
+RUN mamba install nodejs -c conda-forge
+
+#plotly
 RUN mamba install -c plotly plotly=5.3.1
 RUN mamba install -c conda-forge -c plotly jupyter-dash
 
 ##LEAFLET
 RUN mamba install ipyleaflet  -c conda-forge
 RUN mamba install mamba_gator -c conda-forge
+
+##
+RUN jupyter labextension install jupyterlab-stata-highlight
 
 ##
 RUN jupyter lab build
