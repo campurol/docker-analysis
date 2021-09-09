@@ -1,17 +1,11 @@
 # setup stata kernel
 FROM jupyter/base-notebook:latest
 USER root
-RUN apt-get update && \
-    apt-get install -y autoconf automake build-essential git libncurses5 libtool make pkg-config tcsh vim zlib1g-dev && \
-    wget http://archive.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng_1.2.54.orig.tar.xz && \
-    tar xvf  libpng_1.2.54.orig.tar.xz && \
-    cd libpng-1.2.54 && \
-    ./autogen.sh && \
-    ./configure && \
-    make -j8  && \
-    make install && \
-    ldconfig
-    
+
+# The original base notebook sets the default shell to bash with pipefail flag called
+# This turns is back to the default shell
+SHELL ["/bin/sh", "-c"]
+
 # install stata
 COPY stata_install.tar.gz /home/stata_install.tar.gz
 RUN cd /tmp/ && \
@@ -26,10 +20,23 @@ COPY stata.lic /usr/local/stata
 RUN stata -b update all &
 RUN rm -r /tmp/statafiles/
 RUN rm /home/stata_install.tar.gz
-
-#install stata from other image
 ENV PATH="/usr/local/stata:$PATH"
 
+# And then back to bash with pipefail
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+#updates and such
+RUN apt-get update && \
+    apt-get install -y autoconf automake build-essential git libncurses5 libtool make pkg-config tcsh vim zlib1g-dev && \
+    wget http://archive.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng_1.2.54.orig.tar.xz && \
+    tar xvf  libpng_1.2.54.orig.tar.xz && \
+    cd libpng-1.2.54 && \
+    ./autogen.sh && \
+    ./configure && \
+    make -j8  && \
+    make install && \
+    ldconfig
+    
 #install stata kernel
 RUN pip install stata_kernel && python -m stata_kernel.install
 RUN chmod +x ~/.stata_kernel.conf
