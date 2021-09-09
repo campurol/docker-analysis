@@ -1,22 +1,3 @@
-# initial setup
-FROM ubuntu:latest AS stata
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y wget
-USER root
-
-# install stata
-COPY stata_install.tar.gz /home/stata_install.tar.gz
-RUN cd /tmp/ && \
-    mkdir -p statafiles && \
-    cd statafiles && \
-    tar -zxf /home/stata_install.tar.gz && \
-    cd /usr/local && \
-    mkdir -p stata && \
-    cd stata && \
-    yes | /tmp/statafiles/install
-COPY stata.lic /usr/local/stata
-RUN stata -b update all &
-
 # setup stata kernel
 FROM jupyter/base-notebook:latest
 USER root
@@ -30,6 +11,21 @@ RUN apt-get update && \
     make -j8  && \
     make install && \
     ldconfig
+    
+# install stata
+COPY stata_install.tar.gz /home/stata_install.tar.gz
+RUN cd /tmp/ && \
+    mkdir -p statafiles && \
+    cd statafiles && \
+    tar -zxf /home/stata_install.tar.gz && \
+    cd /usr/local && \
+    mkdir -p stata && \
+    cd stata && \
+    yes | /tmp/statafiles/install
+COPY stata.lic /usr/local/stata
+RUN stata -b update all &
+RUN rm -r /tmp/statafiles/
+RUN rm /home/stata_install.tar.gz
 
 #install stata from other image
 COPY --from=stata /usr/local/stata /usr/local/stata
