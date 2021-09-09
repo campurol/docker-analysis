@@ -17,7 +17,7 @@ RUN cd /tmp/ && \
     cd stata && \
     yes | /tmp/statafiles/install
 COPY stata.lic /usr/local/stata
-RUN stata -b update all &
+RUN stata -b update all
 RUN rm -r /tmp/statafiles/
 RUN rm /home/stata_install.tar.gz
 ENV PATH="/usr/local/stata:$PATH"
@@ -29,13 +29,16 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update && \
     apt-get install -y autoconf automake build-essential git libncurses5 libtool make pkg-config tcsh vim zlib1g-dev && \
     wget http://archive.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng_1.2.54.orig.tar.xz && \
-    tar xvf  libpng_1.2.54.orig.tar.xz && \
+    tar xvf libpng_1.2.54.orig.tar.xz && \
+    rm libpng_1.2.54.orig.tar.xz && \
     cd libpng-1.2.54 && \
     ./autogen.sh && \
     ./configure && \
     make -j8  && \
     make install && \
-    ldconfig
+    ldconfig && \
+    cd .. && \
+    rm -R libpng_1.2.54.orig.tar.xz/
     
 #install stata kernel
 RUN pip install stata_kernel && python -m stata_kernel.install
@@ -43,11 +46,13 @@ RUN chmod +x ~/.stata_kernel.conf
 
 #install python packages
 RUN pip install geopy
-RUN mamba install pandas scikit-learn numpy --channel conda-forge
-RUN mamba install pytorch torchvision torchaudio cpuonly -c pytorch
-RUN mamba install pysal geopandas libspatialindex=1.9.3 --channel conda-forge
 RUN mamba install shapely pyproj rtree matplotlib descartes mapclassify contextily
-
+RUN mamba install pytorch torchvision torchaudio cpuonly -c pytorch
+RUN mamba install pandas scikit-learn numpy pysal geopandas osmnx libspatialindex=1.9.3 --channel conda-forge
+#RUN mamba install beautifulsoup4 black bokeh bottleneck cartopy contextily coverage cython dill flake8 flake8-bugbear folium gdal \
+#                  isort jupyterlab mapclassify nbdime nbqa nodejs numexpr osmnx pandana pillow pip psycopg2 pydocstyle pyproj pysal \
+#                  pytest python == 3.9.* python-igraph rasterio seaborn scikit-learn scipy sphinx statsmodels urbanaccess 
+                  
 #install jupyter extensions
 RUN mamba install nodejs -c conda-forge
 
