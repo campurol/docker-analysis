@@ -34,12 +34,12 @@ jobs:
       - name: Download License
         uses: wei/wget@v1
         with:
-          args: -q -O stata.lic ${{ secrets.STATA_LICENSE }}
+          args: -O stata.lic ${{ secrets.STATA_LICENSE }}
       
       - name: Download Stata
         uses: wei/wget@v1
         with:
-          args: -q -O stata_install.tar.gz ${{ secrets.STATA_URL }}
+          args: -O stata_install.tar.gz ${{ secrets.STATA_URL }}
           
       - name: Extract Docker metadata
         id: meta
