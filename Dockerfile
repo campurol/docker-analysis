@@ -14,6 +14,7 @@ RUN cd /tmp/ && \
     cd stata && \
     yes | /tmp/statafiles/install
 COPY stata.lic /usr/local/stata
+RUN stata -b update all &
 
 # setup stata kernel
 FROM jupyter/base-notebook:latest
@@ -28,9 +29,11 @@ RUN apt-get update && \
     make -j8  && \
     make install && \
     ldconfig
+
 #install stata from other image
 COPY --from=stata /usr/local/stata /usr/local/stata
 ENV PATH="/usr/local/stata:$PATH"
+
 #install stata kernel
 RUN pip install stata_kernel && python -m stata_kernel.install
 RUN chmod +x ~/.stata_kernel.conf
