@@ -1,7 +1,8 @@
 # initial setup
-FROM ubuntu:latest AS stata
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y wget
+FROM ubuntu:focal AS stata
+USER root
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update --yes
 
 # install stata
 COPY stata_install.tar.gz /home/stata_install.tar.gz
@@ -70,6 +71,5 @@ ENV TZ=America/Toronto
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #RUN COMMAND
-USER $NB_UID
 WORKDIR /home/
 CMD ["start-notebook.sh"]
