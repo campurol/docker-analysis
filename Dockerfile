@@ -1,7 +1,7 @@
 # initial setup
-FROM ubuntu:focal AS stata
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update
+FROM ubuntu:latest AS stata
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y wget
 USER root
 
 # install stata
@@ -72,4 +72,4 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #RUN COMMAND
 WORKDIR /home/
-CMD ["start-notebook.sh"]
+CMD ["jupyter", "lab", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
