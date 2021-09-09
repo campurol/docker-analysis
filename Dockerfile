@@ -2,7 +2,8 @@
 FROM ubuntu:focal AS stata
 USER root
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update --yes
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN apt-get update
 
 # install stata
 COPY stata_install.tar.gz /home/stata_install.tar.gz
