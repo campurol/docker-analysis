@@ -36,7 +36,7 @@ RUN pip install stata_kernel && python -m stata_kernel.install
 RUN chmod +x ~/.stata_kernel.conf
 
 #install python packages
-RUN pip geopy
+RUN pip install geopy
 RUN mamba install pandas scikit-learn numpy --channel conda-forge
 RUN mamba install pytorch torchvision torchaudio cpuonly -c pytorch
 RUN mamba install pysal geopandas libspatialindex=1.9.3 --channel conda-forge
