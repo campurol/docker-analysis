@@ -28,7 +28,6 @@ RUN rm -r /tmp/statafiles/
 RUN rm /home/stata_install.tar.gz
 
 #install stata from other image
-COPY --from=stata /usr/local/stata /usr/local/stata
 ENV PATH="/usr/local/stata:$PATH"
 
 #install stata kernel
