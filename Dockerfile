@@ -53,7 +53,9 @@ RUN mamba install -c conda-forge -c plotly jupyter-dash
 RUN mamba install ipyleaflet  -c conda-forge
 RUN mamba install mamba_gator -c conda-forge
 
-####
+##
+RUN jupyter lab build
+
 #CLEANING UP
 ###
 RUN apt-get remove pkg-config -y
@@ -68,6 +70,6 @@ ENV TZ=America/Toronto
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #RUN COMMAND
-RUN mkdir -p /home/notebook
-WORKDIR /home/notebook
+USER $NB_UID
+WORKDIR /home/
 CMD ["start-notebook.sh"]
