@@ -20,11 +20,10 @@ ENV PATH="/usr/local/stata:$PATH"
 COPY stata.lic /usr/local/stata
 RUN sudo chmod 777 -R /usr/local/stata
 RUN /usr/local/stata/ -b update all 
-#RUN stata -b update all
-#RUN sudo echo 'update all' | /usr/local/stata/
 RUN rm -r /tmp/statafiles/
 RUN rm /home/stata_install.tar.gz
-
+COPY setup.do /home
+RUN cd /home && stata -b do setup.do
 
 # And then back to bash with pipefail
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
