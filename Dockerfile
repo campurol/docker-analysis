@@ -20,7 +20,7 @@ ENV PATH="/usr/local/stata:$PATH"
 COPY stata.lic /usr/local/stata
 #RUN stata -b update all
 #RUN /usr/local/stata/ -b update all 
-RUN echo 'update all' | /usr/local/stata/
+RUN sudo echo 'update all' | /usr/local/stata/
 RUN rm -r /tmp/statafiles/
 RUN rm /home/stata_install.tar.gz
 
