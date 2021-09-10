@@ -1,6 +1,8 @@
 # First stage
 FROM ubuntu:latest as install
-USER root
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y wget
+
 COPY stata_install.tar.gz /home/stata_install.tar.gz
 RUN cd /tmp/ && \
     mkdir -p statafiles && \
@@ -12,7 +14,7 @@ RUN cd /tmp/ && \
     yes | /tmp/statafiles/install
 COPY stata.lic /usr/local/stata
 
-# setup stata kernel
+# Second Step
 FROM jupyter/base-notebook:latest
 USER root
 

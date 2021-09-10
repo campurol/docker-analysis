@@ -1,14 +1,10 @@
-set more off, perm
-
-update all
-
 /* setup.do */
 sysdir
 
 /* add packages to the macro */
 
 * *** Add required packages from SSC to this list ***
-    local ssc_packages "estout reghdfe ftools ppmlhdfe"
+    local ssc_packages "estout ftools reghdfe ppmlhdfe"
 
     // local ssc_packages "estout boottest"
     
@@ -21,7 +17,8 @@ sysdir
 
     * Install packages using net
     *  net install yaml, from("https://raw.githubusercontent.com/gslab-econ/stata-misc/master/")
-    
+	net install packagesearch, from("https://lydreiner.github.io/Statapackagesearch/")
+
 	
 /* other commands */
 
@@ -29,5 +26,6 @@ sysdir
 	mata: mata mlib index
 
 
-
+set more off, perm
+update all
 
