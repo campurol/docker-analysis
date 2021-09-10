@@ -1,7 +1,11 @@
 # First stage
 FROM ubuntu:latest as install
-COPY stata_install.tar.gz /home/stata_install.tar.gz
 USER root
+#
+RUN ln -s /usr/lib64/libncurses.so.6.1 /usr/lib64/libncurses.so.5
+RUN ls -l /usr/lib64/libncurses*
+#
+COPY stata_install.tar.gz /home/stata_install.tar.gz
 RUN cd /tmp/ && \
     mkdir -p statafiles && \
     cd statafiles && \
@@ -83,6 +87,9 @@ RUN echo "c.NotebookApp.password='sha1:6b5076404aea:d8938059746229331a568de8bd92
 RUN apt-get install -y tzdata
 ENV TZ=America/Toronto
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+#FIX AGAIN
+RUN ln -s /usr/lib64/libncurses.so.6.1 /usr/lib64/libncurses.so.5
 
 #RUN COMMAND
 WORKDIR /home/
