@@ -1,10 +1,6 @@
 # First stage
 FROM ubuntu:latest as install
 USER root
-#
-RUN ln -s /usr/lib64/libncurses.so.6.1 /usr/lib64/libncurses.so.5
-RUN ls -l /usr/lib64/libncurses*
-#
 COPY stata_install.tar.gz /home/stata_install.tar.gz
 RUN cd /tmp/ && \
     mkdir -p statafiles && \
@@ -15,10 +11,6 @@ RUN cd /tmp/ && \
     cd stata && \
     yes | /tmp/statafiles/install
 COPY stata.lic /usr/local/stata
-RUN echo "export PATH=/usr/local/stata:${PATH}" >> /root/.bashrc
-ENV PATH "$PATH:/usr/local/stata" 
-COPY setup.do /home
-RUN cd /home && stata -b do setup.do
 
 # setup stata kernel
 FROM jupyter/base-notebook:latest
@@ -41,9 +33,11 @@ RUN apt-get update && \
 
 # install stata
 COPY --from=install /usr/local/stata/ /usr/local/stata/
+#RUN chown ${CHOWN_HOME_OPTS} "${NB_UID}:${NB_GID}" "/usr/local/stata/"
 RUN echo "export PATH=/usr/local/stata:${PATH}" >> /root/.bashrc
 ENV PATH "$PATH:/usr/local/stata" 
-RUN chown ${CHOWN_HOME_OPTS} "${NB_UID}:${NB_GID}" "/usr/local/stata/"
+COPY setup.do /home
+RUN cd /home && stata -b do setup.do
 
 #install stata kernel
 RUN pip install stata_kernel && python -m stata_kernel.install
