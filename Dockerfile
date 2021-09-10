@@ -1,8 +1,8 @@
 # First stage
 FROM ubuntu:latest as install
 COPY stata_install.tar.gz /home/stata_install.tar.gz
-RUN sudo -s && \
-    cd /tmp/ && \
+USER root
+RUN cd /tmp/ && \
     mkdir -p statafiles && \
     cd statafiles && \
     tar -zxf /home/stata_install.tar.gz && \
@@ -39,6 +39,7 @@ RUN apt-get update && \
 COPY --from=install /usr/local/stata/ /usr/local/stata/
 RUN echo "export PATH=/usr/local/stata:${PATH}" >> /root/.bashrc
 ENV PATH "$PATH:/usr/local/stata" 
+RUN chown ${CHOWN_HOME_OPTS} "${NB_UID}:${NB_GID}" "/usr/local/stata/"
 
 #install stata kernel
 RUN pip install stata_kernel && python -m stata_kernel.install
