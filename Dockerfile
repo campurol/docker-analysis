@@ -19,9 +19,9 @@ FROM jupyter/base-notebook:latest
 USER root
 
 #updates and such
-RUN apt-get update && \
-    apt-get install -y autoconf automake build-essential git libncurses5 libtool make pkg-config tcsh vim zlib1g-dev && \
-    wget http://archive.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng_1.2.54.orig.tar.xz && \
+RUN apt-get update 
+RUN apt-get install -y autoconf automake build-essential git libncurses5 libtool make pkg-config tcsh vim zlib1g-dev
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng_1.2.54.orig.tar.xz && \
     tar xvf libpng_1.2.54.orig.tar.xz && \
     cd libpng-1.2.54 && \
     ./autogen.sh && \
@@ -29,11 +29,10 @@ RUN apt-get update && \
     make -j8  && \
     make install && \
     ldconfig
-#RUN rm libpng_1.2.54.orig.tar.xz && rm - R libpng-1.2.54
+RUN rm /home/jovyan/libpng_1.2.54.orig.tar.xz && rm - R /home/jovyan/libpng-1.2.54/
    
 # install stata
 COPY --from=install /usr/local/stata/ /usr/local/stata/
-#RUN chown ${CHOWN_HOME_OPTS} "${NB_UID}:${NB_GID}" "/usr/local/stata/"
 RUN echo "export PATH=/usr/local/stata:${PATH}" >> /root/.bashrc
 ENV PATH "$PATH:/usr/local/stata" 
 COPY setup.do /home
@@ -42,6 +41,9 @@ RUN cd /home && stata -b do setup.do
 #install stata kernel
 RUN pip install stata_kernel && python -m stata_kernel.install
 RUN chmod +x ~/.stata_kernel.conf
+
+#install stata_setup
+RUN pip install stata_setup
 
 #install python packages
 RUN pip install geopy
