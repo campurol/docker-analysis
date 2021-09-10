@@ -29,7 +29,7 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng_1.2.54.or
     make -j8  && \
     make install && \
     ldconfig
-RUN rm /home/jovyan/libpng_1.2.54.orig.tar.xz && rm - R /home/jovyan/libpng-1.2.54/
+#RUN rm /home/jovyan/libpng_1.2.54.orig.tar.xz && rm - R /home/jovyan/libpng-1.2.54/
    
 # install stata
 COPY --from=install /usr/local/stata/ /usr/local/stata/
