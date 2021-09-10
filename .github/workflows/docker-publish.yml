@@ -15,10 +15,8 @@ on:
   workflow_dispatch:
 
 env:
-  # Use docker.io for Docker Hub if empty
   REGISTRY: docker.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: rcampusa/docker-analysis
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -32,9 +30,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
       - name: Download License
         uses: wei/wget@v1
         with:
@@ -44,12 +39,6 @@ jobs:
         uses: wei/wget@v1
         with:
           args: -O stata_install.tar.gz ${{ secrets.STATA_URL }}
-
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
@@ -62,4 +51,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          tags: rcampusa/docker-analysis:latest
