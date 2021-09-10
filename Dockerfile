@@ -1,7 +1,8 @@
 # First stage
 FROM ubuntu:latest as install
 COPY stata_install.tar.gz /home/stata_install.tar.gz
-RUN cd /tmp/ && \
+RUN sudo -s && \
+    cd /tmp/ && \
     mkdir -p statafiles && \
     cd statafiles && \
     tar -zxf /home/stata_install.tar.gz && \
@@ -10,10 +11,10 @@ RUN cd /tmp/ && \
     cd stata && \
     yes | /tmp/statafiles/install
 COPY stata.lic /usr/local/stata
-COPY setup.do /home
-RUN cd /home && stata -b do setup.do
 RUN echo "export PATH=/usr/local/stata:${PATH}" >> /root/.bashrc
 ENV PATH "$PATH:/usr/local/stata" 
+COPY setup.do /home
+RUN cd /home && stata -b do setup.do
 
 # setup stata kernel
 FROM jupyter/base-notebook:latest
