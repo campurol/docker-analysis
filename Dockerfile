@@ -17,13 +17,13 @@ RUN cd /tmp/ && \
     cd stata && \
     yes | /tmp/statafiles/install
 COPY stata.lic /usr/local/stata
-RUN stata -b update all
 RUN rm -r /tmp/statafiles/
 RUN rm /home/stata_install.tar.gz
 ENV PATH="/usr/local/stata:$PATH"
 
 # And then back to bash with pipefail
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN stata -b update all
 
 #updates and such
 RUN apt-get update && \
