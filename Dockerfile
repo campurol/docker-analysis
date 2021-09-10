@@ -12,6 +12,7 @@ RUN cd /tmp/ && \
 COPY stata.lic /usr/local/stata
 COPY setup.do /home
 RUN cd /home && stata -b do setup.do
+RUN echo "export PATH=/usr/local/stata:${PATH}" >> /root/.bashrc
 
 # setup stata kernel
 FROM jupyter/base-notebook:latest
