@@ -1,12 +1,5 @@
-# setup stata kernel
-FROM jupyter/base-notebook:latest
-USER root
-
-# The original base notebook sets the default shell to bash with pipefail flag called
-# This turns is back to the default shell
-SHELL ["/bin/sh", "-c"]
-
-# install stata
+# First stage
+FROM ubuntu:latest as install
 COPY stata_install.tar.gz /home/stata_install.tar.gz
 RUN cd /tmp/ && \
     mkdir -p statafiles && \
@@ -16,18 +9,13 @@ RUN cd /tmp/ && \
     mkdir -p stata && \
     cd stata && \
     yes | /tmp/statafiles/install
-ENV PATH="/usr/local/stata:$PATH"
 COPY stata.lic /usr/local/stata
-RUN rm -r /tmp/statafiles/
-RUN rm /home/stata_install.tar.gz
-
-#setup stata
 COPY setup.do /home
 RUN cd /home && stata -b do setup.do
-#RUN sudo chmod 777 -R /usr/local/stata
 
-# And then back to bash with pipefail
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# setup stata kernel
+FROM jupyter/base-notebook:latest
+USER root
 
 #updates and such
 RUN apt-get update && \
@@ -43,7 +31,12 @@ RUN apt-get update && \
     ldconfig && \
     cd .. && \
     rm -R libpng_1.2.54.orig.tar.xz/
-    
+
+# install stata
+COPY --from=install /usr/local/stata/ /usr/local/stata/
+RUN echo "export PATH=/usr/local/stata:${PATH}" >> /root/.bashrc
+ENV PATH "$PATH:/usr/local/stata" 
+
 #install stata kernel
 RUN pip install stata_kernel && python -m stata_kernel.install
 RUN chmod +x ~/.stata_kernel.conf
