@@ -21,16 +21,14 @@ RUN apt-get update && \
     apt-get install -y autoconf automake build-essential git libncurses5 libtool make pkg-config tcsh vim zlib1g-dev && \
     wget http://archive.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng_1.2.54.orig.tar.xz && \
     tar xvf libpng_1.2.54.orig.tar.xz && \
-    rm libpng_1.2.54.orig.tar.xz && \
     cd libpng-1.2.54 && \
     ./autogen.sh && \
     ./configure && \
     make -j8  && \
     make install && \
-    ldconfig && \
-    cd .. && \
-    rm -R libpng_1.2.54.orig.tar.xz/
-
+    ldconfig
+#RUN rm libpng_1.2.54.orig.tar.xz && rm - R libpng-1.2.54
+   
 # install stata
 COPY --from=install /usr/local/stata/ /usr/local/stata/
 #RUN chown ${CHOWN_HOME_OPTS} "${NB_UID}:${NB_GID}" "/usr/local/stata/"
