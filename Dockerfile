@@ -46,7 +46,7 @@ RUN chmod +x ~/.stata_kernel.conf
 RUN pip install stata_setup
 
 #install python packages
-RUN pip install geopy
+RUN pip install geopy tilemapbase
 RUN mamba install shapely pyproj rtree matplotlib descartes mapclassify contextily
 RUN mamba install pytorch torchvision torchaudio cpuonly -c pytorch
 RUN mamba install pandas scikit-learn numpy pysal geopandas osmnx libspatialindex=1.9.3 --channel conda-forge
