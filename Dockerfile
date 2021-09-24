@@ -49,10 +49,10 @@ RUN pip install stata_setup
 RUN pip install geopy tilemapbase
 RUN mamba install shapely pyproj rtree matplotlib descartes mapclassify contextily
 RUN mamba install pytorch torchvision torchaudio cpuonly -c pytorch
-RUN mamba install pandas scikit-learn numpy pysal geopandas osmnx libspatialindex=1.9.3 --channel conda-forge
+RUN mamba install pandas scikit-learn numpy pysal geopandas osmnx statsmodels urbanaccess segregation geosnap pandana rasterio libspatialindex=1.9.3 --channel conda-forge
 #RUN mamba install beautifulsoup4 black bokeh bottleneck cartopy contextily coverage cython dill flake8 flake8-bugbear folium gdal \
 #                  isort jupyterlab mapclassify nbdime nbqa nodejs numexpr osmnx pandana pillow pip psycopg2 pydocstyle pyproj pysal \
-#                  pytest python == 3.9.* python-igraph rasterio seaborn scikit-learn scipy sphinx statsmodels urbanaccess 
+#                  pytest python == 3.9.* python-igraph  seaborn scikit-learn scipy sphinx  
                   
 #install jupyter extensions
 RUN mamba install nodejs -c conda-forge
