@@ -79,6 +79,10 @@ RUN apt-get remove pkg-config -y
 ENV JUPYTER_TOKEN=my_secret_token
 RUN echo "c.NotebookApp.password='sha1:6b5076404aea:d8938059746229331a568de8bd9223825ec11fa9'">>/home/jovyan/.jupyter/jupyter_notebook_config.py
 
+#JUPYTER CONFIG NGINX
+RUN echo "c.NotebookApp.allow_remote_access='True'">>/home/jovyan/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.allow_originU ='*'">>/home/jovyan/.jupyter/jupyter_notebook_config.py
+
 #Time Zone
 RUN apt-get install -y tzdata
 ENV TZ=America/Toronto
